@@ -3,9 +3,16 @@
 </head>
 
 <body>
-  {{> intro}}
-  {{> step1}}
+  {{> currentStep}}
 </body>
+
+<template name="currentStep">
+  {{{renderedStep}}}
+</template>
+
+<template name="step0">
+  {{> intro}}
+</template>
 
 <template name="intro">
   <h1>A Meteor Demo</h1>
@@ -13,6 +20,8 @@
 </template>
 
 <template name="step1">
+  {{> intro}}
+
   <h3>Step 1: Quick start!</h3>
   <ul>
     <li><a href="http://www.meteor.com" target="_blank">Meteor Homepage</a></li>
@@ -30,4 +39,13 @@
   </ul>
 
   <button id="next-step">Step 3</button>
+</template>
+
+<template name="step3">
+  <h3>Step 3: Review and refactor</h3>
+  <ul>
+    <li>Reusable nav buttons</li>
+  </ul>
+
+  <button id="next-step">Step 4</button>
 </template>
