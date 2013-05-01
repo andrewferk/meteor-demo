@@ -4,6 +4,7 @@
 
 <body>
   {{> currentStep}}
+  {{> nav}}
 </body>
 
 <template name="currentStep">
@@ -28,8 +29,6 @@
     <li><a href="http://docs.meteor.com" target="_blank">Meteor Documentation</a></li>
     <li><a href="http://docs.meteor.com/#quickstart" target="_blank">Quick start!</a></li>
   </ul>
-
-  <button id="next-step">Step 2</button>
 </template>
 
 <template name="step2">
@@ -37,8 +36,6 @@
   <ul>
     <li><em>We're done!</em></li>
   </ul>
-
-  <button id="next-step">Step 3</button>
 </template>
 
 <template name="step3">
@@ -46,6 +43,15 @@
   <ul>
     <li>Reusable nav buttons</li>
   </ul>
+</template>
 
-  <button id="next-step">Step 4</button>
+<template name="nav">
+  <div>
+    {{#if isNotFirst}}
+    <button id="prev-step">&laquo; Step {{prevStep}}</button>
+    {{/if}}
+    {{#if isNotLast}}
+    <button id="next-step">Step {{nextStep}} &raquo;</button>
+    {{/if}}
+  </div>
 </template>
