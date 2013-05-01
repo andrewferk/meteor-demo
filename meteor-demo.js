@@ -1,5 +1,5 @@
 if (Meteor.isClient) {
-  Session.set('currentStep', 'step1');
+  Session.set('currentStep', 'step2');
 
   Template.currentStep.renderedStep = function() {
     return Template[Session.get('currentStep')]();
