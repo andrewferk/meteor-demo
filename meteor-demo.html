@@ -5,6 +5,8 @@
 <body>
   {{> currentStep}}
   {{> nav}}
+  <hr/>
+  {{> grades}}
 </body>
 
 <template name="currentStep">
@@ -61,4 +63,32 @@
     <button id="next-step">Step {{nextStep}} &raquo;</button>
     {{/if}}
   </div>
+</template>
+
+<template name="grades">
+  <form action="#" id="grade-form">
+    <h3>Add a grade</h3>
+    <div>
+      <label for="grade-score">Grade:</label>
+      <select id="grade-score">
+        <option>A</option>
+        <option>B</option>
+        <option>C</option>
+        <option>D</option>
+        <option>F</option>
+      </select>
+    </div>
+    <div>
+      <label for="grade-comment">Comment:</label>
+      <textarea id="grade-comment"></textarea>
+    </div>
+    <div><button type="submit">Add grade</button></div>
+  </form>
+  
+  <hr/>
+
+  <h3>Grades</h3>
+  {{#each grades}}
+    <div><strong>{{score}}:</strong> {{comment}}</div>
+  {{/each}}
 </template>
