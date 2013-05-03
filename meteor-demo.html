@@ -3,6 +3,7 @@
 </head>
 
 <body>
+  {{loginButtons}}
   {{> currentStep}}
   {{> nav}}
   <hr/>
@@ -97,8 +98,5 @@
   
   <hr/>
 
-  <h3>Grades</h3>
-  {{#each grades}}
-    <div><strong>{{score}}:</strong> {{comment}}</div>
-  {{/each}}
+  <div><strong>Average grade:</strong> {{avgGrade}}</div>
 </template>
