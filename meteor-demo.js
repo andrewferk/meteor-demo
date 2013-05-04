@@ -1,5 +1,6 @@
 if (Meteor.isClient) {
-  Session.set('currentStep', 4);
+  if (!Session.get('currentStep'))
+    Session.set('currentStep', 4);
   
   var currentStep = function() {
     return Session.get('currentStep');
