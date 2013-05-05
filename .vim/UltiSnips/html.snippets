@@ -1,0 +1,63 @@
+snippet d2a "demo.step2a"
+<template name="currentStep">
+  {{renderedStep}}
+</template>
+endsnippet
+
+snippet d3a "demo.step3a"
+<template name="nav">
+  <div>
+    {{#if isNotFirst}}
+    <button id="prev-step">&laquo; Step {{prevStep}}</button>
+    {{/if}}
+    {{#if isNotLast}}
+    <button id="next-step">Step {{nextStep}} &raquo;</button>
+    {{/if}}
+  </div>
+</template>
+endsnippet
+
+snippet d4a "demo.step4a"
+<hr/>
+{{> grades}}
+endsnippet
+
+snippet d4b "demo.step4b"
+<template name="grades">
+  <h3>Grades</h3>
+  {{#each grades}}
+    <div><strong>{{score}}:</strong> {{comment}}</div>
+  {{/each}}
+</template>
+endsnippet
+
+snippet d4d "demo.step4d"
+<form action="#" id="grade-form">
+  <h3>Add a grade</h3>
+  <div>
+    <label for="grade-score">Grade:</label>
+    <select id="grade-score">
+      <option>A</option>
+      <option>B</option>
+      <option>C</option>
+      <option>D</option>
+      <option>F</option>
+    </select>
+  </div>
+  <div>
+    <label for="grade-comment">Comment:</label>
+    <textarea id="grade-comment"></textarea>
+  </div>
+  <div><button type="submit">Add grade</button></div>
+</form>
+
+<hr/>
+endsnippet
+
+snippet d5a "demo.step5a"
+{{loginButtons}}
+endsnippet
+
+snippet d5c "demo.step5c"
+<div><strong>Average grade:</strong> {{avgGrade}}</div>
+endsnippet

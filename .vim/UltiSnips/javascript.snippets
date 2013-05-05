@@ -1,0 +1,184 @@
+snippet d2b "demo.step2b"
+if (Meteor.isClient) {
+  Template.currentStep.renderedStep = 'step1';
+}
+endsnippet
+
+snippet d2c "demo.step2c"
+Template.currentStep.renderedStep = Template.step1();
+endsnippet
+
+snippet d2d "demo.step2d"
+Session.set('currentStep', 'step1');
+endsnippet
+
+snippet d2e "demo.step2e"
+Session.get('currentStep')
+endsnippet
+
+snippet d2f "demo.step2f"
+Template.step1.events({
+  'click #next-step': function(event) {
+    Session.set('currentStep', 'step2');
+  }
+});
+endsnippet
+
+snippet d2g "demo.step2c"
+Template.currentStep.renderedStep = function() {
+  return Template[Session.get('currentStep')]();
+};
+endsnippet
+
+snippet d3b "demo.step3b"
+Session.set('currentStep', 3);
+
+var currentStep = function() {
+  return Session.get('currentStep');
+};
+
+var nextStep = function() {
+  return Session.get('currentStep') + 1;
+};
+
+var prevStep = function() {
+  return Session.get('currentStep') - 1;
+};
+endsnippet
+
+snippet d3c "demo.step3c"
+return Template['step' + currentStep()]();
+endsnippet
+
+snippet d3d "demo.step3d"
+Template.nav.isNotFirst = function() {
+  return currentStep() !== 0;
+};
+
+Template.nav.isNotLast = function() {
+  return Template['step' + nextStep()] !== undefined;
+};
+
+Template.nav.nextStep = function() {
+  return nextStep();
+};
+
+Template.nav.prevStep = function() {
+  return prevStep();
+}
+endsnippet
+
+snippet d3e "demo.step3e"
+Template.nav.events({
+  'click #next-step': function(event) {
+    Session.set('currentStep', nextStep());
+  },
+  'click #prev-step': function(event) {
+    Session.set('currentStep', prevStep());
+  }
+});
+endsnippet
+
+snippet d4c "demo.step4c"
+Grades = new Meteor.Collection('grades');
+
+if (Meteor.isClient) {
+  Template.grades.grades = function() {
+    return Grades.find({});
+  };
+}
+endsnippet
+
+snippet d4e "demo.step4e"
+Template.grades.events({
+  'submit #grade-form': function(event) {
+    event.preventDefault();
+    Grades.insert({
+      score: $('#grade-score').val(),
+      comment: $('#grade-comment').val()
+    });
+  }
+});
+endsnippet
+
+snippet d5b "demo.step5b"
+Grades.allow({
+  insert: function (userId, doc) {
+    return (userId && doc.score);
+  }
+});
+endsnippet
+
+snippet d5d "demo.step5d"
+if (Meteor.isServer) {
+  Meteor.publish("scores", function() {
+    if (this.userId) {
+      return Grades.find({}, {fields: {comment: 0}});
+    }
+  });
+}
+endsnippet
+
+snippet d5e "demo.step5e"
+Meteor.subscribe('scores');
+endsnippet
+
+snippet d5f "demo.step5f"
+Template.grades.avgGrade = function() {
+  var scoreWeight = {'A': 100, 'B': 90, 'C': 80, 'D': 70, 'F': 60};
+  var invWeight = {'100': 'A', '90': 'B', '80': 'C', '70': 'D', '60': 'F'};
+  var grades = Grades.find();
+  var total = 0;
+  grades.forEach(function(grade) {
+    total = total + scoreWeight[grade.score];
+  });
+  var avg = Math.round((total / grades.count()) / 10) * 10;
+  return invWeight[avg.toString()];
+};
+endsnippet
+
+snippet d5g "demo.step5g"
+Meteor.publish('avgGrade', function() {
+  var scoreWeight = {'A': 100, 'B': 90, 'C': 80, 'D': 70, 'F': 60};
+  var invWeight = {'100': 'A', '90': 'B', '80': 'C', '70': 'D', '60': 'F'};
+  var initializing = true,
+      self = this,
+      total = 0,
+      count = 0,
+      avg = 0;
+
+  var handle = Grades.find().observeChanges({
+    added: function (id, fields) {
+      total += scoreWeight[fields.score];
+      count++;
+      if (!initializing) {
+        var newAvg = Math.round((total / count) / 10) * 10;
+        if (avg != newAvg) {
+          avg = newAvg;
+          self.changed('avgGrade', 'score', {score: invWeight[avg.toString()]});
+        }
+      }
+    }
+  });
+
+  avg = Math.round((total / count) / 10) * 10;
+  initializing = false;
+  self.added('avgGrade', 'score', {score: invWeight[avg.toString()]});
+  self.ready();
+
+  self.onStop(function() {
+    handle.stop();
+  });
+});
+endsnippet
+
+snippet d5h "demo.step5h"
+AvgGrade = new Meteor.Collection('avgGrade');
+Meteor.subscribe('avgGrade');
+endsnippet
+
+snippet d5i "demo.step5i"
+var avg = AvgGrade.find().fetch()[0];
+if (avg)
+  return avg.score;
+endsnippet
